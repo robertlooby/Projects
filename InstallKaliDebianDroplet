@@ -1,0 +1,7 @@
+nano /etc/apt/sources.list
+deb http://http.kali.org/kali kali-rolling main contrib non-free
+apt-get update
+apt-get install kali-archive-keyring -y
+apt-get update
+apt-cache search kali-linux
+apt-get install kali-linux-full
