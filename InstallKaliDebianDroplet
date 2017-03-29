@@ -1,7 +1,53 @@
+#INITIAL KALI INSTALL
 nano /etc/apt/sources.list
 deb http://http.kali.org/kali kali-rolling main contrib non-free
 apt-get update
 apt-get install kali-archive-keyring
 apt-get update
 apt-cache search kali-linux
-apt-get install kali-linux-all -y
+apt-get install kali-linux-top10 -y
+git clone https://github.com/trustedsec/social-engineer-toolkit.git
+
+
+#OPEN SSL SERVER CONFIG
+apt-get install openssh-server
+update-rc.d -f ssh remove
+update-rc.d -f ssh defaults
+cd /etc/ssh/
+mkdir insecure_original_default_kali_keys
+mv ssh_host_* insecure_original_default_kali_keys/
+dpkg-reconfigure openssh-server
+sudo service ssh restart
+update-rc.d -f ssh enable 2 3 4 5
+
+#MOTD 
+nano /etc/motd
+service ssh restart
+
+#AUTO LOGIN
+useradd -m root -G sudo -s /bin/bash
+passwd Password1$
+
+nano /etc/lightdm/lightdm.conf
+delete the # before these lines:
+autologin-user=root
+autologin-user-timeout=0
+
+nano /etc/pam.d/lightdm-autologin
+change this starting on line 11:
+
+# Allow access without authentication
+###auth required pam_succeed_if.so user != root quiet_success
+auth required pam_permit.so
+
+
+
+
+
+
+
+
+chkconfig ssh
+apt-get install chkconfig
+chkconfig -l ssh
+cd /etc/ssh/
