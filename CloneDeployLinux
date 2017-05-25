@@ -1,0 +1,145 @@
+Install Web Application
+
+sudo su
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+
+echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+
+echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main" | sudo tee -a /etc/apt/sources.list.d/mono-xamarin.list
+
+apt-get update
+
+apt-get -y install mono-devel libapache2-mod-mono apache2 udpcast liblz4-tool
+
+wget "https://sourceforge.net/projects/clonedeploy/files/CloneDeploy 1.2.0/clonedeploy-1.2.0.tar.gz"
+
+tar xvzf clonedeploy-1.2.0.tar.gz
+
+cd clonedeploy
+
+cp clonedeploy.conf /etc/apache2/sites-available/
+
+cp -r web /var/www/html/clonedeploy
+
+cp -r tftpboot /
+
+ln -s ../../images /tftpboot/proxy/bios/images
+
+ln -s ../../images /tftpboot/proxy/efi32/images
+
+ln -s ../../images /tftpboot/proxy/efi64/images
+
+ln -s ../../kernels /tftpboot/proxy/bios/kernels
+
+ln -s ../../kernels /tftpboot/proxy/efi32/kernels
+
+ln -s ../../kernels /tftpboot/proxy/efi64/kernels
+
+mkdir -p /cd_dp/images
+
+mkdir /cd_dp/resources
+
+mkdir /var/www/.mono
+
+chown -R www-data:www-data /tftpboot /cd_dp /var/www/html/clonedeploy /var/www/.mono
+
+chmod 1777 /tmp
+
+a2ensite clonedeploy
+
+service apache2 restart
+
+Install Database
+
+Create a root database password when prompted
+
+apt-get -y install mysql-server
+
+mysql -u root -p
+
+create database clonedeploy;
+
+quit
+
+mysql -u root -p clonedeploy < cd.sql -v
+
+Open /var/www/html/clonedeploy/web.config with a text editor and change the following values:
+
+
+
+xx_marker1_xx to your root database password you created earlier
+
+xx_marker2_xx to some random characters, probably should be a minimum of 8
+
+
+
+
+
+
+
+Install Samba Server
+
+
+
+apt-get -y install samba
+
+addgroup cdsharewriters
+
+useradd cd_share_ro
+
+useradd cd_share_rw -G cdsharewriters
+
+adduser www-data cdsharewriters
+
+The following two commands will prompt you to create passwords for the smb share for a read only user and a read write user. Remember these passwords, you will need them again during the Web Interface Initial Setup.
+
+smbpasswd -a cd_share_ro
+
+smbpasswd -a cd_share_rw
+
+echo "[cd_share]
+path = /cd_dp
+valid users = @cdsharewriters, cd_share_ro
+create mask = 02775
+directory mask = 02775
+guest ok = no
+writable = yes
+browsable = yes
+read list = @cdsharewriters, cd_share_ro
+write list = @cdsharewriters
+force create mode = 02775
+force directory mode = 02775
+force group = +cdsharewriters" >> /etc/samba/smb.conf
+
+chown -R www-data:cdsharewriters /cd_dp
+
+chmod -R 2775 /cd_dp
+
+service smbd restart
+
+
+
+
+Install TFTP Server
+
+apt-get -y install tftpd-hpa
+
+echo "TFTP_USERNAME=\"root\"
+TFTP_DIRECTORY=\"/tftpboot\"
+TFTP_ADDRESS=\"0.0.0.0:69\"
+TFTP_OPTIONS=\"-s\"" > /etc/default/tftpd-hpa
+
+service tftpd-hpa restart
+
+service apache2 restart
+ 
+
+Post Install Setup
+
+Open the CloneDeploy Web Interface
+
+http://server-ip/clonedeploy
+
+Login with
+
+clonedeploy / password
