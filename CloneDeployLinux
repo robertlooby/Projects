@@ -1,9 +1,14 @@
-You can just copy and paste these commands into a terminal window if this is a new installation of Ubuntu.  This is also a just a suggested installation procedure.  Make any changes you feel would be better.  I recommend following the guide to get things working and then perform any changes after you have confirmed things are working.
+FORKED FROM CLONEDEPLOY.COM -> This is a working tweak of the CloneDeploy install works with Ubuntu 16.04 LTS 
+
+You can just copy and paste these commands into a terminal window if this is a new installation of Ubuntu.  
+This is also a just a suggested installation procedure. 
+Make any changes you feel would be better.  
+I recommend following the guide to get things working and then perform any changes after you have confirmed things are working.
+
 Pre-Requisites
-A DHCP Server
-Assign your server a static IP
-Only been test on 64bit Ubuntu 14 and 15
- 
+A DHCP Server - windows works better with the proper options set 
+Assign your server a static IP - not needed if put mac into the reservation of windows dhcp 
+
 Install Web Application
 sudo su
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
