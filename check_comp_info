@@ -1,0 +1,37 @@
+DELAY 2000
+GUI r
+DELAY 1000
+STRING powershell -c "Start-Process powershell -verb runas"
+DELAY 1050
+ENTER
+DELAY 5000
+LEFTARROW
+DELAY 1000
+ENTER
+DELAY 1000
+STRING Get-WmiObject -Class Win32_OperatingSystem -ComputerName .| Select-Object -Property Manufacturer, Caption, Version, OSArchitecture, RegisteredUser, SerialNumber | Format-List
+ENTER 
+DELAY 1000
+STRING Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property Manufacturer, Model, Caption, Domain, PrimaryOwnerName, SystemType
+ENTER
+DELAY 1000
+STRING Get-WmiObject -Class Win32_BIOS -ComputerName . | Select-Object -Property Manufacturer, Description, Version, SMBBIOSBIOSVersion, SerialNumber | Format-List
+ENTER
+DELAY 1000
+STRING Get-WmiObject -Class win32_processor | select -Property  Manufacturer,Name,Caption,NumberOfCores,MaxClockSpeed,L2CacheSize,L3SacheSize | Format-List
+ENTER
+DELAY 1000
+STRING Get-WmiObject -class win32_logicaldisk | Where-Object size -gt 0 | Format-Table -AutoSize DeviceID, @{n="Size(GB)"; e={$_.size/1gb -as [int]}}, @{n="Free(GB)"; e={$_.freespace/1gb -as [int]}}, @{n="% Free"; e={100*$_.freespace/$_.size -as [int]}}, ProviderName | Format-Table -AutoSize
+ENTER
+DELAY 1000
+STRING Get-WmiObject -Class Win32_Product | Select-Object InstallDate,Vendor,Description | Format-Table -AutoSize
+ENTER
+STRING Get-WmiObject -class win32_printer | Select-Object Name, @{n="Default";e={if($_.attributes -band 4){$attr="default"};$attr}}, @{n="Shared";e={if($_.attributes -band 8){$attr="shared"};$attr}}, @{n="Status";e={switch($_.printerstatus){1{$stat="other"}
+STRING 2{$stat="unknown"}
+STRING 3{$stat="idle"}
+STRING 4{$stat="printing"}
+STRING 5{$stat="warming up"}
+STRING 6{$stat="stopped printing"}
+STRING 7{$stat="offline"}};
+STRING $stat}} | Format-Table -Property Status, Shared, Default, Name -Autosize
+ENTER
