@@ -1,0 +1,61 @@
+useradd kali
+passwd kali
+usermod -a -G sudo kali
+chsh -s /bin/bash kali
+cd /etc/xrdp
+cp xrdp.ini xrdp.ini_backup
+nano xrdp.ini
+## autorun=sesman-any
+max_bpp=16
+[sesman-any]
+ip=127.0.0.1
+
+cd /etc/X11/
+cp Xwrapper.config Xwrapper.config_backup
+nano Xwrapper.config 
+allowed_users=anybody
+service xrdp start
+service xrdp-sesman start
+update-rc.d xrdp enable
+systemctl enable xrdp-sesman.service
+service xrdp statusro
+netstat -putln
+
+
+ssh -i "kali-aws.pem" centos@ec2-18-188-211-249.us-east-2.compute.amazonaws.com
+
+systemctl enable firewalld
+
+https://sourceforge.net/projects/guacamoleinstallscript
+yum install -y wget firewalld
+
+wget http://sourceforge.net/projects/guacamoleinstallscript/files/CentOS/guacamole-install-script.sh
+
+chmod +x guacamole-install-script.sh
+
+./guacamole-install-script.shrob 
+
+ssh -i "kali-aws.pem" centos@ec2-18-220-63-63.us-east-2.compute.amazonaws.com
+18.220.105.255
+
+ Enter the root password for MySQL: mysqlroot_123
+ Enter the Guacamole DB name: guacamoledb
+ Enter the Guacamole DB username: guacamoleuser
+ Enter the Guacamole DB password: Password1
+ Enter the Java KeyStore password (least 6 characters): Password1
+ Do you wish to Install the Proxy feature (Nginx)?: no
+
+sudo iptables -A OUTPUT -p tcp --dport 8443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 8443 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 8080 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 8080 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+tshark -f "tcp port 8443" -i any
+
+
+windows 2016 1 aws rdp
+ec2-13-59-169-0.us-east-2.compute.amazonaws.com
+Administrator
+lEJ$5(bcM82vwYx=StRgFz-DmvjWUUf6
+
+Administrator
+3U;yM*zwky=7onSIsTt=lU?igUAFxCs?
